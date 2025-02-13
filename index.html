@@ -12,6 +12,7 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -45,7 +46,7 @@
         }
         /* 横向きフルスクリーン表示 */
         .fullscreen {
-            position: fixed;
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(90deg);
@@ -53,6 +54,9 @@
             white-space: nowrap;
             width: 100vh;
             height: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
         }
         .hide {
