@@ -16,12 +16,14 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            transition: all 0.5s;
         }
         .container {
             background: rgba(255, 255, 255, 0.2);
             padding: 20px;
             border-radius: 10px;
             backdrop-filter: blur(10px);
+            transition: all 0.5s;
         }
         button {
             margin: 5px;
@@ -39,11 +41,27 @@
         .timer-display {
             font-size: 48px;
             margin: 20px 0;
+            transition: all 0.5s;
+        }
+        /* 横向きフルスクリーン表示 */
+        .fullscreen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(90deg);
+            font-size: 15vw;
+            white-space: nowrap;
+            width: 100vh;
+            height: 100vw;
+            text-align: center;
+        }
+        .hide {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="control-panel">
         <h1>マッサージタイマー</h1>
         <p>時間を選んでスタート</p>
         <button onclick="startTimer(300)">5分</button>
@@ -51,11 +69,12 @@
         <button onclick="startTimer(900)">15分</button>
         <input type="number" id="custom-time" placeholder="カスタム（秒）">
         <button onclick="startCustomTimer()">開始</button>
-        <div class="timer-display" id="timer">00:00</div>
         <button onclick="stopTimer()">停止</button>
-        <audio id="alarm-sound" src="alarm.mp3"></audio>
-        <audio id="bgm" src="bgm.mp3" loop></audio>
     </div>
+
+    <div class="timer-display" id="timer">00:00</div>
+    <audio id="alarm-sound" src="alarm.mp3"></audio>
+    <audio id="bgm" src="bgm.mp3" loop></audio>
 
     <script>
         let timer;
@@ -66,6 +85,7 @@
             clearInterval(timer);
             timeLeft = seconds;
             updateDisplay();
+            enterFullscreenMode();
             timer = setInterval(() => {
                 if (timeLeft > 0) {
                     timeLeft--;
@@ -74,6 +94,7 @@
                     clearInterval(timer);
                     document.getElementById("alarm-sound").play();
                     alert("タイマー終了！");
+                    exitFullscreenMode();
                 }
             }, 1000);
             bgm.play();
@@ -92,6 +113,7 @@
             updateDisplay();
             bgm.pause();
             bgm.currentTime = 0;
+            exitFullscreenMode();
         }
 
         function updateDisplay() {
@@ -99,6 +121,16 @@
             let seconds = timeLeft % 60;
             document.getElementById("timer").textContent =
                 String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+        }
+
+        function enterFullscreenMode() {
+            document.getElementById("control-panel").classList.add("hide");
+            document.getElementById("timer").classList.add("fullscreen");
+        }
+
+        function exitFullscreenMode() {
+            document.getElementById("control-panel").classList.remove("hide");
+            document.getElementById("timer").classList.remove("fullscreen");
         }
     </script>
 </body>
